@@ -105,6 +105,7 @@ const theme = useTheme();
 
   return (
     <div className='App'>
+      <h1>TodoList Manager App</h1>
       <div className="main--container">
         
         {/* Input Section code */}
@@ -136,7 +137,6 @@ const theme = useTheme();
                 })}
                 </TabPanel>
                 <TabPanel value={value} index={1} >
-                  This is pending
                   {TodoList.map((element,index)=>
                 {
                   if(element.completed==false)
