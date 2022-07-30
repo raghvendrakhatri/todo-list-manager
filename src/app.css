@@ -1,0 +1,52 @@
+.App
+{
+  position: relative;
+  height: 100vh;
+  width: 100%;
+}
+
+.main--container
+{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50% ,-50%);
+  min-width: 50%;
+  background-color: #D3E4CD;
+  padding: 20px;
+}
+
+h1{
+  text-align: center;
+}
+
+.input_section
+{
+ 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.todo-section
+{
+  max-width: 100%;
+  margin: auto;
+}
+
+@media only screen and (max-width: 1000px) {
+ /* .todo-section
+{
+  min-width: 100%;
+  margin: auto;
+} */
+}
+
+@media only screen and (max-width: 440px) {
+ 
+.input_section
+{
+  flex-direction: column;
+}
+
+}
