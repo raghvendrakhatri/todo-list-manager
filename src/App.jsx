@@ -48,7 +48,7 @@ const showApiData = async ()=>
   {
     const result = await fetch("https://api.coindesk.com/v1/bpi/currentprice.json");
     const data = await result.json();
-    console.log(data);
+    console.log(data.bpi);
 
   }
 
