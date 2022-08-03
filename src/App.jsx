@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import './app.css';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import axios from "axios";
 
 import { useEffect } from 'react';
 
@@ -46,9 +47,8 @@ const App = () => {
 
 const showApiData = async ()=>
   {
-    const result = await fetch("https://api.coindesk.com/v1/bpi/currentprice.json");
-    const data = await result.json();
-    console.log(data.bpi);
+    const result = await axios.get("https://api.coindesk.com/v1/bpi/currentprice.json");
+    console.log(result.data);
 
   }
 
