@@ -9,42 +9,66 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import './app.css';
-import Mytodo from './components/Mytodo';
-import db from "./firebase";
-import firebase from 'firebase';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+
 import { useEffect } from 'react';
+
+function getLocalItem()
+{
+  let list = localStorage.getItem('todolist');
+
+  if(list)
+  return JSON.parse(localStorage.getItem('todolist'));
+  else
+  return [];
+}
+
+getLocalItem();
+
 const App = () => {
 
   const [Input,setInput] = useState("");
-  const [TodoList,setTodo] = useState([]);
-  const [pending,setPending] = useState([]);
-  // const [completed,setCompleted] = useState([]);
-  // const [completed,setCompleted] = useState([]);
+  const [TodoList,settodo] = useState(getLocalItem());
+
+ 
+
+     const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: '#100F0F',
+  boxShadow: 24,
+  p: 4,
+};
+
+
+const showApiData = async ()=>
+  {
+    const result = await fetch("https://api.coindesk.com/v1/bpi/currentprice.json");
+    const data = await result.json();
+    console.log(data);
+
+  }
+
 
 
   useEffect(()=>
-{
-  // this loads fire when the app loads 
-  db.collection('todos').orderBy('timestamp','desc').onSnapshot(snapshot => {
-    setTodo(snapshot.docs.map(doc => ({id :doc.id , task: doc.data().task,completed:doc.data().completed})));
-    setPending(snapshot.docs.map(doc => ({id :doc.id , task: doc.data().task,completed:doc.data().completed})));
-  });
+  {
+     localStorage.setItem("todolist",JSON.stringify(TodoList));
+     showApiData();
+  },[TodoList]);
+
 
   
-
-},[])
-
-
   
 
   function submit(event)
   {
     event.preventDefault();
-   db.collection('todos').add({
-      task: Input,
-      completed:false,
-      timestamp : firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    if(Input!='')
+   settodo([...TodoList ,Input]);
    setInput("");
   }
 
@@ -61,7 +85,7 @@ const App = () => {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          <Typography component="div">{children}</Typography>
         </Box>
       )}
     </div>
@@ -95,7 +119,10 @@ const theme = useTheme();
   };
 
 
-
+ const update = (ind)=>
+ {
+  console.log(ind);
+ }
 
 
 
@@ -105,7 +132,6 @@ const theme = useTheme();
 
   return (
     <div className='App'>
-      <h1>TodoList Manager App</h1>
       <div className="main--container">
         
         {/* Input Section code */}
@@ -126,30 +152,30 @@ const theme = useTheme();
                   aria-label="full width tabs example"
                 >
                   <Tab label="All Task" {...a11yProps(0)}  sx={{ bgcolor:"#272727",}} />
-                  <Tab label="Pending Task" {...a11yProps(1)}  sx={{ bgcolor:"#272727",}}/>
-                  <Tab label="Completed Task" {...a11yProps(2)} sx={{ bgcolor:"#272727",}}/>
+                  
                 </Tabs>
               
-                <TabPanel value={value} index={0} >
-                {TodoList.map((element,index)=>
+            <TabPanel value={value} index={0} style={{textAlign:"center"}}>
                 {
-                  return <Mytodo text={element} key={index} type={true}></Mytodo>
-                })}
-                </TabPanel>
-                <TabPanel value={value} index={1} >
-                  {TodoList.map((element,index)=>
-                {
-                  if(element.completed==false)
-                  return <Mytodo text={element} key={index} type={false}></Mytodo>
-                })}
-                </TabPanel>
-                <TabPanel value={value} index={2} >
-                  {TodoList.map((element,index)=>
-                {
-                  if(element.completed)
-                  return <Mytodo text={element} key={index} type={true}></Mytodo>
-                })}
-                </TabPanel>
+                  TodoList.map((element,index)=>
+                  {
+                    return (
+                          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}} key={index}>
+                            <p>{element}</p>
+                            <span style={{display:"flex", justifyContent:"center",alignItems:"center"}}>
+                              <Button varient="contained" color="primary" style={{margin:"10px"}} onClick={()=>
+                              {
+                                const arr = TodoList;
+                                arr.splice(index,1);
+                                settodo([...arr]);
+                              }}><DeleteForeverIcon/></Button>
+            
+                             </span>
+
+                          </div>
+  )}) 
+                }
+           </TabPanel>
             </Box>
 
         </div>  
